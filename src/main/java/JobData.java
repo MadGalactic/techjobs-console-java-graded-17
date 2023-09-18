@@ -1,6 +1,7 @@
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class JobData {
     private static boolean isDataLoaded = false;
 
     private static ArrayList<HashMap<String, String>> allJobs;
+
 
     /**
      * Fetch list of all values from loaded data,
@@ -95,7 +97,25 @@ public class JobData {
         loadData();
 
         // TODO - implement this method
-        return null;
+        ArrayList<HashMap<String, String>> result = new ArrayList<>();
+
+        // Convert the search value to lowercase for case-insensitive comparison
+        String searchValueLower = value.toLowerCase();
+
+        // For each row in allJobs
+        for (HashMap<String, String> row : allJobs) {
+            for (String column : row.keySet()) {
+                // Get the value from the current column for the current row
+                String columnValue = row.get(column);
+                // Check if the column value matches the search term value
+                if (columnValue != null && columnValue.toLowerCase().equals(searchValueLower)) {
+                    result.add(row);
+                    break;  // Avoid duplicates
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
